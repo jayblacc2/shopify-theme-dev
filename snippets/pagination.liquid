@@ -1,0 +1,76 @@
+
+{% assign aria_label = aria_label | default: 'Pagination navigation' %}
+{% assign show_page_numbers = show_page_numbers | default: true %}
+{% assign container_classes = container_classes | default: 'mt-8' %}
+
+{% if paginate.pages > 1 %}
+  <nav class="pagination {{ container_classes }} flex justify-center" aria-label="{{ aria_label }}">
+    <div class="flex items-center space-x-1">
+      <!-- Previous Button -->
+      {% if paginate.previous %}
+        <a href="{{ paginate.previous.url }}" 
+           class="relative inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50 hover:text-gray-700 transition-colors duration-200"
+           aria-label="Go to previous page">
+          <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          Previous
+        </a>
+      {% else %}
+        <span class="relative inline-flex items-center px-3 py-2 text-sm font-medium text-gray-300 bg-gray-100 border border-gray-300 rounded-l-md cursor-not-allowed"
+              aria-label="Previous page (disabled)">
+          <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          Previous
+        </span>
+      {% endif %}
+      
+      <!-- Page Numbers -->
+      {% if show_page_numbers %}
+        {% for part in paginate.parts %}
+          {% if part.is_link %}
+            <a href="{{ part.url }}" 
+               class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-900 transition-colors duration-200"
+               aria-label="Go to page {{ part.title }}">
+              {{ part.title }}
+            </a>
+          {% else %}
+            {% if part.title == paginate.current_page %}
+              <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-blue-600 cursor-default"
+                    aria-current="page"
+                    aria-label="Current page, page {{ part.title }}">
+                {{ part.title }}
+              </span>
+            {% else %}
+              <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300"
+                    aria-label="Page {{ part.title }}">
+                {{ part.title }}
+              </span>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+
+      <!-- Next Button -->
+      {% if paginate.next %}
+        <a href="{{ paginate.next.url }}" 
+           class="relative inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50 hover:text-gray-700 transition-colors duration-200"
+           aria-label="Go to next page">
+          Next
+          <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </a>
+      {% else %}
+        <span class="relative inline-flex items-center px-3 py-2 text-sm font-medium text-gray-300 bg-gray-100 border border-gray-300 rounded-r-md cursor-not-allowed"
+              aria-label="Next page (disabled)">
+          Next
+          <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </span>
+      {% endif %}
+    </div>
+  </nav>
+{% endif %}

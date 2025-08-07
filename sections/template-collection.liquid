@@ -1,0 +1,47 @@
+<div class="px-4 py-8">
+  <a href="{{routes.collections_url}}" class="text-base text-gray-300 text-center block my-4 hover:underline">Back to Collections</a>
+  {% paginate collection.products by section.settings.number_of_pages %}
+    <h1 class="text-3xl text-center">{{ collection.title }}</h1>
+
+    <div class="max-w-6xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-3">
+        {% comment %} products inside the pagination {% endcomment %}
+        {% for product in collection.products %}
+          {% if product.available %}
+            {% render 'product-card'
+              , product: product %}
+          {% else %}
+            <p>No available items yet</p>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+
+    <div class="mt-12 flex items-center justify-center space-x-2">
+      {{ paginate | default_pagination }}
+    </div>
+  {% endpaginate %}
+
+</div>
+
+
+{% schema %}
+  {
+    "name": "Template Collection",
+    "settings": [
+      {
+        "type": "number",
+        "id": "number_of_pages",
+        "label": "Number of Pages",
+        "default": 6
+      },
+      {
+        "type": "checkbox",
+        "id": "vendor",
+        "label": "Show Vendor",
+        "default": true
+      }
+    ]
+  }
+{% endschema %}
