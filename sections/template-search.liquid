@@ -1,0 +1,53 @@
+<div class="mx-auto">
+  {% paginate search.results by 10 %}
+    <h1 class="text-xl font-bold my-4 text-center">Search Results</h1>
+<div class="flex justify-center items-center my-4">
+  <form action="/search" method="GET" class="flex gap-2 w-full max-w-xl">
+    <input 
+  autocomplete="off"
+      type="text"
+      name="q"
+      value="{{ search.terms | escape }}"
+      placeholder="Search..."
+      class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-500"
+    >
+    <button type="submit" class="px-6 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-700">
+      Search
+    </button>
+  </form>
+</div>
+{% if search.performed %}
+  {% if search.results.size > 0 %}
+    <div class="max-w-7xl mx-auto">
+      <p class="text-gray-600 ml-3 text-sm mb-2">Showing {{ search.results.size }} results for "{{ search.terms | escape }}"</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for item in search.results %}
+          {% case item.object_type %}
+            {% when 'product' %}
+              {% render 'product-card'
+                , product: item %}
+            {% when 'article' %}
+              {% render 'article-card'
+                , article: item %}
+            {% else %}
+              {% render 'default-card'
+                , item: item %}
+          {% endcase %}
+        {% endfor %}
+      </div>
+    </div> 
+    
+    {% else %}
+      <div class="text-center text-gray-500 my-4 flex justify-center items-center h-80">
+        <p>
+          No search results found, for the {{search.terms}}. You can try again.
+        </p>
+      </div>
+  {% endif %}
+{% endif %}
+    </div>
+    {% render 'pagination'
+      , pagination: pagination %}
+  {% endpaginate %}
+</div>
